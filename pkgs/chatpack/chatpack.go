@@ -28,7 +28,6 @@ func GetNewMSGService(ctx context.Context) *chat.SpacesMessagesService {
 	return newMsgService
 }
 
-// getChatService setup client to deal with chat.google.com.
 func getChatService(ctx context.Context) *chat.Service {
 	oauthClient := auth.GetGoogleChatOauthClient(ctx, os.Getenv("SA_KEY_PATH"))
 
@@ -39,6 +38,7 @@ func getChatService(ctx context.Context) *chat.Service {
 	return chatService
 }
 
+// CreateMSG creates new messages.
 func CreateMSG(title string, msgService *chat.SpacesMessagesService) error {
 	VoteCount = 0
 	msg := createChatCard(VoteCount, title)
@@ -55,6 +55,7 @@ func CreateMSG(title string, msgService *chat.SpacesMessagesService) error {
 	return nil
 }
 
+// UpdateMSG updates existing message to increase voteCount.
 func UpdateMSG(title string, msgService *chat.SpacesMessagesService) error {
 
 	VoteCount += 1
