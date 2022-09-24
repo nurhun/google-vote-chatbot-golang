@@ -12,10 +12,10 @@ import (
 	"google.golang.org/api/option"
 )
 
-var VoteCount int
+var voteCount int
 var param = chat.ActionParameter{
 	Key:   "count",
-	Value: fmt.Sprint(VoteCount),
+	Value: fmt.Sprint(voteCount),
 }
 
 var message chat.Message
@@ -40,8 +40,8 @@ func getChatService(ctx context.Context) *chat.Service {
 
 // CreateMSG creates new messages.
 func CreateMSG(title string, msgService *chat.SpacesMessagesService) error {
-	VoteCount = 0
-	msg := createChatCard(VoteCount, title)
+	voteCount = 0
+	msg := createChatCard(voteCount, title)
 	message, err := msgService.Create(os.Getenv("SPACE"), msg).Do()
 	if err != nil {
 		log.Printf("error create new message: %v\n", err)
@@ -58,8 +58,8 @@ func CreateMSG(title string, msgService *chat.SpacesMessagesService) error {
 // UpdateMSG updates existing message to increase voteCount.
 func UpdateMSG(title string, msgService *chat.SpacesMessagesService) error {
 
-	VoteCount += 1
-	msg := updateChatCard(VoteCount, title)
+	voteCount += 1
+	msg := updateChatCard(voteCount, title)
 
 	log.Printf("message to be updatedddddddddd: %v\n", msg_created)
 

@@ -13,7 +13,7 @@ import (
 	chat "google.golang.org/api/chat/v1"
 )
 
-var Event chat.DeprecatedEvent
+var event chat.DeprecatedEvent
 
 func main() {
 	log.Println("Hello World!")
@@ -29,41 +29,38 @@ func main() {
 		}
 
 		// Parsing request body.
-		if err := json.NewDecoder(r.Body).Decode(&Event); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
 			return
 		}
 
-		switch Event.Type {
+		switch event.Type {
 		case "ADDED_TO_SPACE":
-			if Event.Space.Type != "ROOM" {
+			if event.Space.Type != "ROOM" {
 				break
 			}
 			fmt.Fprint(w, `{"text":"thanks for adding me!"}`)
 
 		case "MESSAGE":
-			if Event.Message.SlashCommand != nil {
-				switch Event.Message.SlashCommand.CommandId {
+			if event.Message.SlashCommand != nil {
+				switch event.Message.SlashCommand.CommandId {
 				case 1:
-					chatpack.CreateMSG(fmt.Sprintf("Vote on last poll by: %s", Event.User.DisplayName), newMsgService)
-					// chatpack.CreateMSG(fmt.Sprintf("Vote on last poll by: %s", "nur"), newMsgService)
+					chatpack.CreateMSG(fmt.Sprintf("Vote on last poll by: %s", event.User.DisplayName), newMsgService)
 				default:
 					fmt.Fprintf(w, `{"text":"No such option!"}`)
 				}
 			} else {
-				fmt.Fprintf(w, `{"text":"No reply for %v"}`, Event.Message.Text)
+				fmt.Fprintf(w, `{"text":"No reply for %v"}`, event.Message.Text)
 			}
 
 		case "CARD_CLICKED":
-			log.Printf("Event: %v", Event.Action.ActionMethodName)
+			log.Printf("event: %v", event.Action.ActionMethodName)
 
-			if Event.Action.ActionMethodName == "newvote" {
-				chatpack.CreateMSG(fmt.Sprintf("Vote on last poll by: %s", Event.User.DisplayName), newMsgService)
-				// chatpack.CreateMSG(fmt.Sprintf("Vote on last poll by: %s", "nur"), newMsgService)
-			} else if Event.Action.ActionMethodName == "upvote" {
-				chatpack.UpdateMSG(fmt.Sprintf("Vote on last poll by: %s", Event.User.DisplayName), newMsgService)
-				// chatpack.UpdateMSG(fmt.Sprintf("Vote on last poll by: %s", "nur"), newMsgService)
+			if event.Action.ActionMethodName == "newvote" {
+				chatpack.CreateMSG(fmt.Sprintf("Vote on last poll by: %s", event.User.DisplayName), newMsgService)
+			} else if event.Action.ActionMethodName == "upvote" {
+				chatpack.UpdateMSG(fmt.Sprintf("Vote on last poll by: %s", event.User.DisplayName), newMsgService)
 			}
 
 			// TODO: hasVoted func.
