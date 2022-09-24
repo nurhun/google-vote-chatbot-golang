@@ -2,5 +2,4 @@ runtime: go115
 service: go
 env_variables:
   SA_KEY_PATH: "./sa-key.json"
-  SPACE: "spaces/XXXXXXXX"
   # PORT: 8080    # Auto-assigned by app engine.

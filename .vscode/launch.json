@@ -13,7 +13,6 @@
             "env": {
                 "PORT": "8080",
                 "SA_KEY_PATH": "./sa-key.json",
-                "SPACE": "spaces/XXXXXXXX"
             }
         }
     ]

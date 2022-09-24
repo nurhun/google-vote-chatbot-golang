@@ -7,9 +7,7 @@ import (
 	"net/http"
 
 	"golang.org/x/oauth2"
-	_ "golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	_ "golang.org/x/oauth2/google"
 )
 
 // GetGoogleChatOauthClient  get oauth client with desired scope privilege.
@@ -18,10 +16,13 @@ func GetGoogleChatOauthClient(ctx context.Context, serviceAccountKeyPath string)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	scopes := "https://www.googleapis.com/auth/chat.bot"
+
 	creds, err := google.CredentialsFromJSON(
 		ctx,
 		data,
-		"https://www.googleapis.com/auth/chat.bot",
+		scopes,
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -30,7 +31,12 @@ func GetGoogleChatOauthClient(ctx context.Context, serviceAccountKeyPath string)
 	return oauth2.NewClient(ctx, creds.TokenSource)
 }
 
-// TODO: Check if user already voted. 
+// TODO: Check if user already voted.
 func hasVoted(user string) bool {
+	return false
+}
+
+// TODO: Check if user authorized.
+func isAuthorizerd(user string) bool {
 	return false
 }
